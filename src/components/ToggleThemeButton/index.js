@@ -1,13 +1,13 @@
 import React from 'react';
-import { useTheme } from 'styled-components';
+import { useThemeContext } from '../../styles/AppThemeProvider';
 
 export const ToggleThemeButton = () => {
-  const { theme, handleToggleTheme } = useTheme();
+  const { theme, onToggleTheme } = useThemeContext();
   const icon = theme === 'dark'
     ? '🌤'
     : '🌙'
 
   return (
-    <button onClick={handleToggleTheme} type="button">{icon}</button>
+    <button onClick={onToggleTheme} type="button">{icon}</button>
   )
 }

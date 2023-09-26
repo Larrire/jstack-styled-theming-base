@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createContext, useContext, useMemo, useState } from "react"
 import { ThemeProvider as StyledProvider } from "styled-components"
 import themes from './themes'
@@ -12,14 +12,15 @@ export const AppThemeProvider = ({children}) => {
 
   const handleToggleTheme = () => {
     setTheme( prevState => {
-      const newState = prevState === 'light'
+      return prevState === 'light'
         ? 'dark'
         : 'light'
-
-      localStorage.setItem('myAppThemeValue', newState)
-      return newState
     })
   }
+
+  useEffect(() => {
+    localStorage.setItem('myAppThemeValue', theme)
+  }, [theme])
 
   const currentTheme = useMemo(() => {
     return themes[theme] || themes.light

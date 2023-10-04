@@ -1,36 +1,53 @@
-import React, { useEffect } from "react";
-import { createContext, useContext, useMemo, useState } from "react"
+import React from "react";
+import { createContext, useContext } from "react"
 import { ThemeProvider as StyledProvider } from "styled-components"
 import themes from './themes'
 
 const ThemeContext = createContext();
 export const useThemeContext = () => useContext(ThemeContext)
 
-export const AppThemeProvider = ({children}) => {
-  const initialTheme = localStorage.getItem('myAppThemeValue') || 'light'
-  const [theme, setTheme] = useState(initialTheme);
+export class AppThemeProvider extends React.Component {
+  constructor(props) {
+    super(props)
 
-  const handleToggleTheme = () => {
-    setTheme( prevState => {
-      return prevState === 'light'
-        ? 'dark'
-        : 'light'
-    })
+    this.state = {
+      theme: this.initialTheme()
+    }
+
+    const methods = ['handleToggleTheme']
+    methods.forEach(methodName => {
+      this[methodName] = this[methodName].bind(this)
+    });
   }
 
-  useEffect(() => {
-    localStorage.setItem('myAppThemeValue', theme)
-  }, [theme])
+  initialTheme() {
+    return localStorage.getItem('myAppThemeValue') || 'light'
+  }
 
-  const currentTheme = useMemo(() => {
-    return themes[theme] || themes.light
-  }, [theme]);
-  
-  return (
-    <ThemeContext.Provider value={{theme, onToggleTheme: handleToggleTheme}}>
-      <StyledProvider theme={currentTheme}>
-        {children}
-      </StyledProvider>
-    </ThemeContext.Provider>
-  )
+  handleToggleTheme() {
+    this.setState(
+      prevState => ({
+        theme: (prevState.theme === 'light' ? 'dark' : 'light')
+      })
+    )
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem('myAppThemeValue', this.state.theme);
+  }
+
+  render() {
+    const { children } = this.props
+    const { theme } = this.state
+
+    this.unm
+
+    return (
+      <ThemeContext.Provider value={{theme, onToggleTheme: this.handleToggleTheme}}>
+        <StyledProvider theme={themes[theme] || themes.light}>
+          {children}
+        </StyledProvider>
+      </ThemeContext.Provider>
+    )
+  }
 }

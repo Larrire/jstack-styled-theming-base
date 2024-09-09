@@ -1,16 +1,23 @@
-import React from 'react';
-import { BsSunFill, BsMoonStarsFill } from 'react-icons/bs'
-import { useThemeContext } from '../../styles/AppThemeProvider';
+import React from "react";
+import { ThemeContext } from "../../styles/AppThemeProvider";
+import { Button } from "./Button";
 
-export const ToggleThemeButton = () => {
-  const { theme, onToggleTheme } = useThemeContext();
-  const icon = theme === 'dark'
-    ? <BsSunFill color='#FFAD33'/>
-    : <BsMoonStarsFill color='#00'/>
+export class ToggleThemeButton extends React.Component {
 
-  return (
-    <button onClick={onToggleTheme} type="button">
-      {icon}
-    </button>
-  )
+  content() {
+    return (
+      ({theme, onToggleTheme}) => (
+        <Button theme={theme} onToggleTheme={onToggleTheme}/>
+      )
+    )
+  }
+
+  render() {
+
+    return (
+      <ThemeContext.Consumer>
+        {this.content()}
+      </ThemeContext.Consumer>
+    )
+  }
 }

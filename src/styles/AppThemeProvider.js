@@ -3,7 +3,7 @@ import { createContext, useContext } from "react"
 import { ThemeProvider as StyledProvider } from "styled-components"
 import themes from './themes'
 
-const ThemeContext = createContext();
+export const ThemeContext = createContext();
 export const useThemeContext = () => useContext(ThemeContext)
 
 export class AppThemeProvider extends React.Component {
@@ -39,8 +39,6 @@ export class AppThemeProvider extends React.Component {
   render() {
     const { children } = this.props
     const { theme } = this.state
-
-    this.unm
 
     return (
       <ThemeContext.Provider value={{theme, onToggleTheme: this.handleToggleTheme}}>
